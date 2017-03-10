@@ -142,19 +142,18 @@ export function runQuery(query) {
   };
 }
 
-export function cancelQuery(query) {
+export function postStopQuery(query) {
   return function (dispatch) {
-    dispatch(stopQuery(query));
-    const cancelQueryUrl = '/superset/stop_query/';
+    const stopQueryUrl = '/superset/stop_query/';
     const cancelQueryRequest = { client_id: query.id };
     $.ajax({
       type: 'POST',
       dataType: 'json',
-      url: cancelQueryUrl,
+      url: stopQueryUrl,
       data: cancelQueryRequest,
-      success(results) {
+      success() {
         if (!query.runAsync) {
-          dispatch(querySuccess(query, results));
+          dispatch(stopQuery(query));
         }
       },
     });
